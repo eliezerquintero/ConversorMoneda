@@ -1,20 +1,29 @@
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
-import com.google.gson.JsonParser;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 public class Cliente {
     String Key = "2bf98380484325f525609007";
     URL urlAPI = null;
 
-    public int ObtenerValorConversion(String moneda){
+    public int ObtenerValorConversion(Conversion conversion){
         try{
-            urlAPI = new URL("https://v6.exchangerate-api.com/v6/"+Key+"/latest/"+moneda);
-            HttpURLConnection connection = (HttpURLConnection) urlAPI.openConnection();
-            JsonParser jp = new JsonParser();
-            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
-            JsonObject jsonobj = root.getAsJsonObject();
+            HttpClient clienteHTTP = HttpClient.newHttpClient();
 
-            String req_result = jsonobj.get("result").getAsString();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://v6.exchangerate-api.com/v6/"+Key+"/pair/"+conversion.monedaOrigen+"/"+conversion.monedaDestino+"/"+conversion.cantidad))
+                    .build();
+
+
+            clienteHTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .thenAccept(System.out::println)
+                    .join();
+            clienteHTTP.close();
         }
         catch (Exception e)
         {
