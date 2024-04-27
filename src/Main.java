@@ -22,8 +22,10 @@ Scanner scanner = new Scanner(System.in);
        Cliente cliente = new Cliente();
         Conversion conversion = new Conversion();
         while (continuar) {
+
             System.out.println("-------------------------------------------------");
             System.out.println("Bienvenido al Conversor de Monedas");
+            System.out.println("-------------------------------------------------");
             System.out.println("");
             System.out.println("");
             System.out.println("1- Dólar a Peso Argentino");
@@ -77,16 +79,26 @@ Scanner scanner = new Scanner(System.in);
                     System.out.println("Opción no valida");
                     break;
             }
-            if (continuar){
+            if (continuar && opcion > 0 && opcion < 7){
                 System.out.println("Ingrese la cantidad a convertir:");
                 try{
                     entrada = br.readLine();
                     conversion.cantidad = Double.parseDouble(entrada);
-                    cliente.ObtenerValorConversion(conversion);
+
                 }
                 catch (Exception e)
                 {
                     conversion.cantidad = 0;
+                }
+                if (cliente.ObtenerValorConversion(conversion) == 0)
+                {
+                    System.out.println("-------------------------------------------------");
+                    System.out.println("El resultado de la conversión es: " + conversion.resultado);
+                    System.out.println("-------------------------------------------------");
+                }
+                else
+                {
+                    System.out.println("Error al obtener la conversión");
                 }
                 System.out.println("Presiona Enter para continuar...");
                 System.in.read();
